@@ -1,7 +1,7 @@
 import numpy as np
 from Genetic.Methods.Fit_func import fitness_function
 
-def crossover_1(population, SHOW):
+def crossover_1(population, SHOW, PAR = 3):
     """
     Стандартный кроссовер с точностью до двух знаков после запятой.
     """
@@ -11,21 +11,23 @@ def crossover_1(population, SHOW):
     crossover_count = 0
     len_popul = len(population)
 
-    for i in range(0, pop_half*2, 2):
+    for i in range(0, PAR, 2):
         parent1, parent2 = sorted_pop[i], sorted_pop[i + 1]
         weights1, fit1 = parent1
         weights2, fit2 = parent2
 
-        child1_weights = np.zeros_like(weights1)
-        child2_weights = np.zeros_like(weights2)
+        # Создаем копии массивов, чтобы не изменять оригинальные хромосомы
+        weights1 = weights1.copy()
+        weights2 = weights2.copy()
+
+        child1_weights = [0] * len(weights1)
+        child2_weights = [0] * len(weights2)
 
         if SHOW:
             # Вывод информации о родителях
-            print(f"\nКроссовер {crossover_count + 1}:")
-            print(
-                f"Родитель 1: {np.array2string(weights1, formatter={'float_kind': lambda x: '%.8f' % x})} \nФитнес: {fit1:.8f}")
-            print(
-                f"Родитель 2: {np.array2string(weights2, formatter={'float_kind': lambda x: '%.8f' % x})} \nФитнес: {fit2:.8f}")
+            print(f"\nКроссовер первого типа {crossover_count + 1}:")
+            print(f"Родитель 1: {np.array2string(np.array(weights1), formatter={'float_kind': lambda x: '%.8f' % x})} \nФитнес: {fit1:.8f}")
+            print(f"Родитель 2: {np.array2string(np.array(weights2), formatter={'float_kind': lambda x: '%.8f' % x})} \nФитнес: {fit2:.8f}")
 
         for gene_idx in range(16):
             # Обработка отрицательных значений
@@ -34,7 +36,11 @@ def crossover_1(population, SHOW):
 
             # Работаем с модулями значений
             val1 = abs(round(weights1[gene_idx], 2))
+            if val1 > 1:
+                val1 = 1
             val2 = abs(round(weights2[gene_idx], 2))
+            if val2 > 1:
+                val2 = 1
 
             # Конвертация в бинарный формат (7 бит)
             gene1 = int(val1 * 100)
@@ -54,6 +60,10 @@ def crossover_1(population, SHOW):
             child1_weights[gene_idx] = new_val1
             child2_weights[gene_idx] = new_val2
 
+        # Преобразуем обратно в NumPy массивы для вычисления фитнеса
+        child1_weights = np.array(child1_weights, dtype=np.float32)
+        child2_weights = np.array(child2_weights, dtype=np.float32)
+
         # Расчет фитнеса
         child1_fit = fitness_function(child1_weights)
         child2_fit = fitness_function(child2_weights)
@@ -65,20 +75,17 @@ def crossover_1(population, SHOW):
 
         if SHOW:
             # Вывод информации о потомках
-            print(
-                f"Потомок 1: {np.array2string(child1_weights, formatter={'float_kind': lambda x: '%.8f' % x})} \nФитнес: {child1_fit:.8f}")
-            print(
-                f"Потомок 2: {np.array2string(child2_weights, formatter={'float_kind': lambda x: '%.8f' % x})} \nФитнес: {child2_fit:.8f}")
+            print(f"Потомок 1: {np.array2string(child1_weights, formatter={'float_kind': lambda x: '%.8f' % x})} \nФитнес: {child1_fit:.8f}")
+            print(f"Потомок 2: {np.array2string(child2_weights, formatter={'float_kind': lambda x: '%.8f' % x})} \nФитнес: {child2_fit:.8f}")
 
         crossover_count += 1
 
     population.extend(new_offspring)
-    print(f"\nВсего выполнено кроссоверов: {crossover_count}")
+    print(f"\nВсего выполнено кроссоверов: {crossover_count} для {crossover_count*2} пар")
     print(f"Хромосом в популяции: {len_popul}\n")
     return population
 
-
-def crossover_2(population, SHOW):
+def crossover_2(population, SHOW, PAR = 3):
     """
     Кроссовер с точностью до одного знака после запятой (3 бита).
     """
@@ -88,39 +95,42 @@ def crossover_2(population, SHOW):
     crossover_count = 0
     len_popul = len(population)
 
-    for i in range(0, pop_half*2, 2):
+    for i in range(0, PAR, 2):
         parent1, parent2 = sorted_pop[i], sorted_pop[i + 1]
         weights1, fit1 = parent1
         weights2, fit2 = parent2
 
-        child1_weights = np.zeros_like(weights1)
-        child2_weights = np.zeros_like(weights2)
+        # Создаем копии и сразу конвертируем в списки
+        weights1 = list(weights1.copy())
+        weights2 = list(weights2.copy())
+
+        child1_weights = [0] * 16
+        child2_weights = [0] * 16
 
         if SHOW:
-            # Вывод информации о родителях
-            print(f"\nКроссовер {crossover_count + 1}:")
-            print(
-                f"Родитель 1: {np.array2string(weights1, formatter={'float_kind': lambda x: '%.8f' % x})} \nФитнес: {fit1:.8f}")
-            print(
-                f"Родитель 2: {np.array2string(weights2, formatter={'float_kind': lambda x: '%.8f' % x})} \nФитнес: {fit2:.8f}")
+            print(f"\nКроссовер второго типа {crossover_count + 1}:")
+            print(f"Родитель 1: {np.array2string(np.array(weights1), formatter={'float_kind': lambda x: '%.8f' % x})} \nФитнес: {fit1:.8f}")
+            print(f"Родитель 2: {np.array2string(np.array(weights2), formatter={'float_kind': lambda x: '%.8f' % x})} \nФитнес: {fit2:.8f}")
 
         for gene_idx in range(16):
-            # Обработка отрицательных значений
+            # Обработка знаков
             sign1 = -1 if weights1[gene_idx] < 0 else 1
             sign2 = -1 if weights2[gene_idx] < 0 else 1
 
-            # Работаем с модулями значений, но только с одним знаком после запятой
+            # Работаем с модулями значений и масштабируем
             val1 = abs(round(weights1[gene_idx], 1))
+            if val1 > 1:
+                val1 = 1
             val2 = abs(round(weights2[gene_idx], 1))
+            if val2 > 1:
+                val2 = 1
 
-            # Конвертация в бинарный формат (3 бита)
             gene1 = int(val1 * 10)
             gene2 = int(val2 * 10)
 
+            # Побитовые операции через бинарные строки (как в crossover_1)
             bin1 = format(gene1, '03b')
             bin2 = format(gene2, '03b')
-
-            # Кроссовер (2|1 бита)
             new_bin1 = bin1[:2] + bin2[2:]
             new_bin2 = bin2[:2] + bin1[2:]
 
@@ -131,6 +141,10 @@ def crossover_2(population, SHOW):
             child1_weights[gene_idx] = new_val1
             child2_weights[gene_idx] = new_val2
 
+        # Конвертируем в numpy для фитнеса
+        child1_weights = np.array(child1_weights, dtype=np.float32)
+        child2_weights = np.array(child2_weights, dtype=np.float32)
+
         # Расчет фитнеса
         child1_fit = fitness_function(child1_weights)
         child2_fit = fitness_function(child2_weights)
@@ -141,21 +155,17 @@ def crossover_2(population, SHOW):
         ])
 
         if SHOW:
-            # Вывод информации о потомках
-            print(
-                f"Потомок 1: {np.array2string(child1_weights, formatter={'float_kind': lambda x: '%.8f' % x})} \nФитнес: {child1_fit:.8f}")
-            print(
-                f"Потомок 2: {np.array2string(child2_weights, formatter={'float_kind': lambda x: '%.8f' % x})} \nФитнес: {child2_fit:.8f}")
+            print(f"Потомок 1: {np.array2string(child1_weights, formatter={'float_kind': lambda x: '%.8f' % x})} \nФитнес: {child1_fit:.8f}")
+            print(f"Потомок 2: {np.array2string(child2_weights, formatter={'float_kind': lambda x: '%.8f' % x})} \nФитнес: {child2_fit:.8f}")
 
         crossover_count += 1
 
     population.extend(new_offspring)
-    print(f"\nВсего выполнено кроссоверов: {crossover_count}")
+    print(f"\nВсего выполнено кроссоверов: {crossover_count} для {crossover_count*2} пар")
     print(f"Хромосом в популяции: {len_popul}\n")
     return population
 
-
-def crossover_3(population, SHOW):
+def crossover_3(population, SHOW, PAR = 3):
     """
     Кроссовер с обменом весов (деление пополам и обмен частей).
     """
@@ -165,27 +175,22 @@ def crossover_3(population, SHOW):
     crossover_count = 0
     len_popul = len(population)
 
-    for i in range(0, pop_half*2, 2):
+    for i in range(0, PAR, 2):
         parent1, parent2 = sorted_pop[i], sorted_pop[i + 1]
         weights1, fit1 = parent1
         weights2, fit2 = parent2
 
-        child1_weights = np.zeros_like(weights1)
-        child2_weights = np.zeros_like(weights2)
+        # Конвертируем в списки
+        weights1 = list(weights1.copy())
+        weights2 = list(weights2.copy())
 
-        if SHOW:
-            # Вывод информации о родителях
-            print(f"\nКроссовер {crossover_count + 1}:")
-            print(
-                f"Родитель 1: {np.array2string(weights1, formatter={'float_kind': lambda x: '%.8f' % x})} \nФитнес: {fit1:.8f}")
-            print(
-                f"Родитель 2: {np.array2string(weights2, formatter={'float_kind': lambda x: '%.8f' % x})} \nФитнес: {fit2:.8f}")
+        # Обмен половинами через списки
+        child1_weights = weights1[:8] + weights2[8:]
+        child2_weights = weights2[:8] + weights1[8:]
 
-        # Разделяем веса пополам и меняем их
-        child1_weights[:8] = weights1[:8]
-        child1_weights[8:] = weights2[8:]
-        child2_weights[:8] = weights2[:8]
-        child2_weights[8:] = weights1[8:]
+        # Конвертируем в numpy для фитнеса
+        child1_weights = np.array(child1_weights, dtype=np.float32)
+        child2_weights = np.array(child2_weights, dtype=np.float32)
 
         # Расчет фитнеса
         child1_fit = fitness_function(child1_weights)
@@ -197,15 +202,15 @@ def crossover_3(population, SHOW):
         ])
 
         if SHOW:
-            # Вывод информации о потомках
-            print(
-                f"Потомок 1: {np.array2string(child1_weights, formatter={'float_kind': lambda x: '%.8f' % x})} \nФитнес: {child1_fit:.8f}")
-            print(
-                f"Потомок 2: {np.array2string(child2_weights, formatter={'float_kind': lambda x: '%.8f' % x})} \nФитнес: {child2_fit:.8f}")
+            print(f"\nКроссовер третьего типа {crossover_count + 1}:")
+            print(f"Родитель 1: {np.array2string(np.array(weights1), formatter={'float_kind': lambda x: '%.8f' % x})} \nФитнес: {fit1:.8f}")
+            print(f"Родитель 2: {np.array2string(np.array(weights2), formatter={'float_kind': lambda x: '%.8f' % x})} \nФитнес: {fit2:.8f}")
+            print(f"Потомок 1: {np.array2string(child1_weights, formatter={'float_kind': lambda x: '%.8f' % x})} \nФитнес: {child1_fit:.8f}")
+            print(f"Потомок 2: {np.array2string(child2_weights, formatter={'float_kind': lambda x: '%.8f' % x})} \nФитнес: {child2_fit:.8f}")
 
         crossover_count += 1
 
     population.extend(new_offspring)
-    print(f"\nВсего выполнено кроссоверов: {crossover_count}")
+    print(f"\nВсего выполнено кроссоверов: {crossover_count} для {crossover_count*2} пар")
     print(f"Хромосом в популяции: {len_popul}\n")
     return population

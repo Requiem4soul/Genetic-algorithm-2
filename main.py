@@ -1,20 +1,22 @@
 import numpy as np
 from Genetic.Methods.Fit_func import fitness_function
 from Genetic.Methods.Generate_population import generate_population
-from Genetic.Methods.Mutation import mutation
-from Genetic.Methods.Elitism import elitism
+from Genetic.Methods.Mutation import mutation_1, mutation_2, mutation_3
+from Genetic.Methods.Elitism import update_archive, elitism
 from Genetic.Methods.Crossover import crossover_1, crossover_2, crossover_3
 from Data.correct_img import My_img, NET
 from tqdm import tqdm
 
 # Параметры
-POPULATION_SIZE = 15
-EPOCH = 100
+POPULATION_SIZE = 50
+EPOCH = 500
 MUTATION_RATE = 0.3
-SHOW = False
+SHOW = True
 
 # Инициализация популяции
 population = generate_population(POPULATION_SIZE)
+
+PAR = int(len(population)*0.2)
 
 # Вывод начальной популяции
 print("═" * 50)
@@ -29,9 +31,17 @@ for epoch in range(EPOCH):
     print("═" * 50)
     print(f"Эпоха {epoch + 1}/{EPOCH}")
 
-    population = mutation(population, MUTATION_RATE, SHOW)
-    crossover_3(population, SHOW)
-    elitism(population, POPULATION_SIZE)
+    population = mutation_1(population, MUTATION_RATE, SHOW)
+    population = mutation_2(population, MUTATION_RATE, SHOW)
+    population = mutation_3(population, MUTATION_RATE, SHOW)
+    update_archive(population)
+    population = crossover_3(population, SHOW, PAR)
+    update_archive(population)
+    population = crossover_2(population, SHOW, PAR)
+    update_archive(population)
+    population = crossover_1(population, SHOW, PAR)
+    update_archive(population)
+    population = elitism(population, POPULATION_SIZE, SHOW)
 
     # Статистика по эпохе
     fitness_values = [chromo[1] for chromo in population]
@@ -42,10 +52,17 @@ for epoch in range(EPOCH):
     best_index = fitness_values.index(best_fitness)
     worst_index = fitness_values.index(worst_fitness)
 
+    best_chromosome = population[best_index]
+
     print(f"\nСтатистика эпохи {epoch + 1}:")
     print(f"Лучший:  {best_fitness:.8f} (Хромосома {best_index + 1})")
     print(f"Худший:  {worst_fitness:.8f} (Хромосома {worst_index + 1})")
     print(f"Средний: {avg_fitness:.8f}\n")
+
+    # Сохраняем лучшие веса каждые 10 эпох
+    if (epoch + 1) % 10 == 0:
+        np.savetxt('checkpoint_weights.txt', best_chromosome[0], fmt='%.8f')
+        print(f"Контрольная точка: временное сохранение 'checkpoint_weights.txt'")
 
 # Итоговый результат
 print("═" * 50)
