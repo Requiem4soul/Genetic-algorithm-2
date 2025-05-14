@@ -1,5 +1,5 @@
 import numpy as np
-from Genetic.Methods.Fit_func import fitness_function
+from Genetic.Methods.Fit_func import fitness_function_cached
 
 def crossover_1(population, SHOW, PAR = 3):
     """
@@ -65,8 +65,8 @@ def crossover_1(population, SHOW, PAR = 3):
         child2_weights = np.array(child2_weights, dtype=np.float32)
 
         # Расчет фитнеса
-        child1_fit = fitness_function(child1_weights)
-        child2_fit = fitness_function(child2_weights)
+        child1_fit = fitness_function_cached(child1_weights)
+        child2_fit = fitness_function_cached(child2_weights)
 
         new_offspring.extend([
             (child1_weights, child1_fit),
@@ -146,8 +146,8 @@ def crossover_2(population, SHOW, PAR = 3):
         child2_weights = np.array(child2_weights, dtype=np.float32)
 
         # Расчет фитнеса
-        child1_fit = fitness_function(child1_weights)
-        child2_fit = fitness_function(child2_weights)
+        child1_fit = fitness_function_cached(child1_weights)
+        child2_fit = fitness_function_cached(child2_weights)
 
         new_offspring.extend([
             (child1_weights, child1_fit),
@@ -193,8 +193,8 @@ def crossover_3(population, SHOW, PAR = 3):
         child2_weights = np.array(child2_weights, dtype=np.float32)
 
         # Расчет фитнеса
-        child1_fit = fitness_function(child1_weights)
-        child2_fit = fitness_function(child2_weights)
+        child1_fit = fitness_function_cached(child1_weights)
+        child2_fit = fitness_function_cached(child2_weights)
 
         new_offspring.extend([
             (child1_weights, child1_fit),

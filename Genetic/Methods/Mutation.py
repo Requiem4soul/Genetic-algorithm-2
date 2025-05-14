@@ -1,5 +1,5 @@
 import numpy as np
-from Genetic.Methods.Fit_func import fitness_function
+from Genetic.Methods.Fit_func import fitness_function_cached
 import random
 
 def mutation_1(population, MUTATION_RATE, SHOW):
@@ -18,7 +18,7 @@ def mutation_1(population, MUTATION_RATE, SHOW):
                 if random.random() <= MUTATION_RATE:
                     mutated_weights[i] = np.random.uniform(-1.0, 1.0)  # Новый случайный вес
 
-            new_fitness = fitness_function(mutated_weights)
+            new_fitness = fitness_function_cached(mutated_weights)
             new_chromosomes.append((mutated_weights, new_fitness))
 
             if SHOW:
@@ -56,7 +56,7 @@ def mutation_2(population, MUTATION_RATE, SHOW):
                         if mutated_weights[i] < -1:
                             mutated_weights[i] = -1
 
-            new_fitness = fitness_function(mutated_weights)
+            new_fitness = fitness_function_cached(mutated_weights)
             new_chromosomes.append((mutated_weights, new_fitness))
 
             if SHOW:
@@ -88,9 +88,12 @@ def mutation_3(population, MUTATION_RATE, SHOW):
             for i in range(len(mutated_weights)):
                 # Для каждого гена проверяем, нужно ли его мутировать
                 if random.random() <= MUTATION_RATE:
-                    mutated_weights[i] = mutated_weights[i] * -1  # Новый случайный вес
+                    if mutated_weights[i] != 0:
+                        mutated_weights[i] = mutated_weights[i] * -1  # Новый случайный вес
+                    else:
+                        mutated_weights[i] = np.random.uniform(-0.01, 0.01)
 
-            new_fitness = fitness_function(mutated_weights)
+            new_fitness = fitness_function_cached(mutated_weights)
             new_chromosomes.append((mutated_weights, new_fitness))
 
             if SHOW:

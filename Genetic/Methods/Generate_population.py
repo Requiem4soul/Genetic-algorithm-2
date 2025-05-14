@@ -1,6 +1,5 @@
 import numpy as np
-from Genetic.Methods.Fit_func import fitness_function
-from Data.correct_img import My_img
+from Genetic.Methods.Fit_func import fitness_function_cached
 
 
 def generate_population(population_size):
@@ -12,13 +11,11 @@ def generate_population(population_size):
     population = []
     for _ in range(population_size):
         # Создаём хромосому: 16 случайных весов в [-1, 1]
-        weights = np.random.uniform(low=-1.0, high=1.0, size=16).astype(np.float32)
+        weights = np.random.uniform(low=-0.5, high=0.5, size=16).astype(np.float32)
         # Вычисляем фитнес для этой хромосомы
-        fitness = fitness_function(weights)
+        fitness = fitness_function_cached(weights)
         # Добавляем кортеж (weights, fitness) в популяцию
         population.append((weights, fitness))
 
     return population
-
-# generate_population(5)
 
