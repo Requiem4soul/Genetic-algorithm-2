@@ -3,7 +3,8 @@ from Genetic.Methods.Fit_func import fitness_function_cached
 
 def crossover_1(population, SHOW, PAR = 3):
     """
-    Стандартный кроссовер с точностью до двух знаков после запятой.
+    Стандартный кроссовер с точностью до двух знаков после запятой
+    Numpy массив (вектор) почему-то работал медленее чем обычный кортедж Python
     """
     sorted_pop = sorted(population, key=lambda x: x[1])
     new_offspring = []
@@ -81,7 +82,7 @@ def crossover_1(population, SHOW, PAR = 3):
         crossover_count += 1
 
     population.extend(new_offspring)
-    print(f"\nВсего выполнено кроссоверов: {crossover_count} для {crossover_count*2} пар")
+    print(f"\nВсего выполнено кроссоверов первого типа: {crossover_count} для {crossover_count*2} пар")
     print(f"Хромосом в популяции: {len_popul}\n")
     return population
 
@@ -161,7 +162,7 @@ def crossover_2(population, SHOW, PAR = 3):
         crossover_count += 1
 
     population.extend(new_offspring)
-    print(f"\nВсего выполнено кроссоверов: {crossover_count} для {crossover_count*2} пар")
+    print(f"\nВсего выполнено кроссоверов второго типа: {crossover_count} для {crossover_count*2} пар")
     print(f"Хромосом в популяции: {len_popul}\n")
     return population
 
@@ -211,6 +212,6 @@ def crossover_3(population, SHOW, PAR = 3):
         crossover_count += 1
 
     population.extend(new_offspring)
-    print(f"\nВсего выполнено кроссоверов: {crossover_count} для {crossover_count*2} пар")
+    print(f"\nВсего выполнено кроссоверов третьего типа: {crossover_count} для {crossover_count*2} пар")
     print(f"Хромосом в популяции: {len_popul}\n")
     return population
