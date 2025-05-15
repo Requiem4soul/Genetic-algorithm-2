@@ -6,7 +6,7 @@ archive_dict = {}
 
 def update_archive(population):
     """
-    Добавляет уникальные хромосомы из популяции в архив.
+    Редукция через элитизм, где берутся лучшие POPULATION_SIZE из популяции
     Если архив превышает MAX_ARCHIVE_SIZE, сохраняет только лучших.
     """
     for weights, fitness in population:

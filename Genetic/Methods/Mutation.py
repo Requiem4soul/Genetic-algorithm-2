@@ -3,6 +3,10 @@ from Genetic.Methods.Fit_func import fitness_function_cached
 import random
 
 def mutation_1(population, MUTATION_RATE, SHOW):
+    """
+    Сильная мутация - до ответа далеко
+    Мутация в которой вес может поменяться от -1 до 1
+    """
     new_chromosomes = []
     mutation_count = 0
 
@@ -29,11 +33,15 @@ def mutation_1(population, MUTATION_RATE, SHOW):
                 print(
                     f"Стало: {np.array2string(mutated_weights, formatter={'float_kind': lambda x: '%.8f' % x})} \n(Фитнес: {new_fitness:.8f})\n")
 
-    print(f"\nВсего мутаций для поколения: {mutation_count}")
+    print(f"\nВсего мутаций первого типа для поколения: {mutation_count}")
     population.extend(new_chromosomes)
     return population
 
 def mutation_2(population, MUTATION_RATE, SHOW):
+    """
+    Средняя/слабая мутация - когда близки к ответу
+    Мы меняем значение на +-10% от его значения
+    """
     new_chromosomes = []
     mutation_count = 0
 
@@ -67,7 +75,7 @@ def mutation_2(population, MUTATION_RATE, SHOW):
                 print(
                     f"Стало: {np.array2string(mutated_weights, formatter={'float_kind': lambda x: '%.8f' % x})} \n(Фитнес: {new_fitness:.8f})\n")
 
-    print(f"\nВсего мутаций для поколения: {mutation_count}")
+    print(f"\nВсего мутаций второго типа для поколения: {mutation_count}")
 
 
     population.extend(new_chromosomes)
@@ -75,6 +83,10 @@ def mutation_2(population, MUTATION_RATE, SHOW):
 
 
 def mutation_3(population, MUTATION_RATE, SHOW):
+    """
+    Сильная мутация - далеко от ответа
+    Может поменять знак у элемента веса
+    """
     new_chromosomes = []
     mutation_count = 0
 
@@ -104,6 +116,6 @@ def mutation_3(population, MUTATION_RATE, SHOW):
                 print(
                     f"Стало: {np.array2string(mutated_weights, formatter={'float_kind': lambda x: '%.8f' % x})} \n(Фитнес: {new_fitness:.8f})\n")
 
-    print(f"\nВсего мутаций для поколения: {mutation_count}")
+    print(f"\nВсего мутаций третьего типа для поколения: {mutation_count}")
     population.extend(new_chromosomes)
     return population

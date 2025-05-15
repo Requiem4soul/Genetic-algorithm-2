@@ -4,9 +4,7 @@ from Genetic.Methods.Fit_func import fitness_function_cached
 
 def generate_population(population_size):
     """
-    Генерирует начальную популяцию с вычисленными фитнесами.Кол-во задавать через main
-    Возвращает: список кортежей [(weights, fitness), ...], где weights — numpy массив
-                из 16 весов в диапазоне [-1, 1], fitness — float (результат fitness_function).
+    Генерирует начальную популяцию и вычисляем для них фитнес функцию
     """
     population = []
     for _ in range(population_size):

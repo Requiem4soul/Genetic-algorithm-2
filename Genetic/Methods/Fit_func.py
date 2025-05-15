@@ -7,11 +7,14 @@ fitness_cache = {}
 from Data.correct_img import My_img, NET
 
 def fitness_function_cached(weights):
+    """
+    Фитнес функция, которая оценивает насколько близко к NET значение активации (для правильного и ложных изображений)
+    Если правильное вообще не определилось - сразу 0
+    """
     key = tuple(np.round(weights, 5))  # округляем, чтобы убрать шум
     if key in fitness_cache:
         return fitness_cache[key]
 
-    # Преобразуем веса в массив
     weights = np.array(weights, dtype=np.float32)
 
     # Проверка правильного изображения
