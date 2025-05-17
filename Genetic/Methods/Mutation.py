@@ -1,6 +1,7 @@
 import numpy as np
 from Genetic.Methods.Fit_func import fitness_function_cached
 import random
+from Genetic.Methods.Utils import round_weights
 
 def mutation_1(population, MUTATION_RATE, SHOW):
     """
@@ -22,6 +23,7 @@ def mutation_1(population, MUTATION_RATE, SHOW):
                 if random.random() <= MUTATION_RATE:
                     mutated_weights[i] = np.random.uniform(-1.0, 1.0)  # Новый случайный вес
 
+            mutated_weights = round_weights(mutated_weights)
             new_fitness = fitness_function_cached(mutated_weights)
             new_chromosomes.append((mutated_weights, new_fitness))
 
@@ -64,6 +66,7 @@ def mutation_2(population, MUTATION_RATE, SHOW):
                         if mutated_weights[i] < -1:
                             mutated_weights[i] = -1
 
+            mutated_weights = round_weights(mutated_weights)
             new_fitness = fitness_function_cached(mutated_weights)
             new_chromosomes.append((mutated_weights, new_fitness))
 
@@ -105,6 +108,7 @@ def mutation_3(population, MUTATION_RATE, SHOW):
                     else:
                         mutated_weights[i] = np.random.uniform(-0.01, 0.01)
 
+            mutated_weights = round_weights(mutated_weights)
             new_fitness = fitness_function_cached(mutated_weights)
             new_chromosomes.append((mutated_weights, new_fitness))
 

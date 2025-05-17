@@ -33,7 +33,7 @@ start_time = time.time()
 print("═" * 50)
 print("Начальная популяция:\n")
 for i, (weights, fitness) in enumerate(population):
-    formatted_weights = [f"{w:.8f}" for w in weights]
+    formatted_weights = [f"{w:.2f}" for w in weights]
     print(f"Хромосома {i + 1}: [{', '.join(formatted_weights)}]")
     print(f"Фитнес: {fitness:.8f}\n")
 
@@ -44,9 +44,9 @@ for epoch in range(EPOCH):
     print("═" * 50)
     print(f"Эпоха {epoch + 1}/{EPOCH}")
 
+    population = mutation_3(population, MUTATION_RATE, SHOW)
     population = mutation_1(population, MUTATION_RATE, SHOW)
     population = mutation_2(population, MUTATION_RATE, SHOW)
-    population = mutation_3(population, MUTATION_RATE, SHOW)
     update_archive(population)
     population = crossover_3(population, SHOW, PAR)
     update_archive(population)

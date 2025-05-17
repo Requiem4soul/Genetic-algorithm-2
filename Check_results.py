@@ -6,12 +6,6 @@ from Data.correct_img import NET, My_img
 def load_weights(filename):
     return np.loadtxt(filename, dtype=np.float32)
 
-def add_My_img(My_img):
-    img_array = My_img.reshape((4, 4)) * 255
-    save_path = "Data/Pictures_for_recognize/My_img.png"
-    Image.fromarray(img_array.astype(np.uint8), mode='L').save(save_path)
-    print(f"Изображение перезаписано")
-
 def format_image(bits):
     # Представление 4x4
     return "\n".join(
@@ -54,6 +48,5 @@ def evaluate_weights(weights):
 
 # Пример вызова
 if __name__ == "__main__":
-    add_My_img(My_img)
     weights = load_weights("Data/Save_weights/best_weights.txt")
     evaluate_weights(weights)
