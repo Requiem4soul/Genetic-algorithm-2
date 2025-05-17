@@ -1,7 +1,7 @@
 import numpy as np
 from Genetic.Methods.Fit_func import fitness_function_cached
 import random
-from Genetic.Methods.Utils import round_weights
+from Genetic.Methods.Utils import round_weights, zero_destroyer
 
 def mutation_1(population, MUTATION_RATE, SHOW):
     """
@@ -24,6 +24,7 @@ def mutation_1(population, MUTATION_RATE, SHOW):
                     mutated_weights[i] = np.random.uniform(-1.0, 1.0)  # Новый случайный вес
 
             mutated_weights = round_weights(mutated_weights)
+            mutated_weights = zero_destroyer(mutated_weights)
             new_fitness = fitness_function_cached(mutated_weights)
             new_chromosomes.append((mutated_weights, new_fitness))
 
@@ -42,7 +43,7 @@ def mutation_1(population, MUTATION_RATE, SHOW):
 def mutation_2(population, MUTATION_RATE, SHOW):
     """
     Средняя/слабая мутация - когда близки к ответу
-    Мы меняем значение на +-10% от его значения
+    Мы меняем значение на +-20% от его значения
     """
     new_chromosomes = []
     mutation_count = 0
@@ -57,16 +58,19 @@ def mutation_2(population, MUTATION_RATE, SHOW):
             for i in range(len(mutated_weights)):
                 # Для каждого гена проверяем, нужно ли его мутировать
                 if random.random() <= MUTATION_RATE:
-                    if mutated_weights[i] >= 0:
-                        mutated_weights[i] = np.random.uniform(mutated_weights[i]*0.9, mutated_weights[i]*1.1)
+                    if mutated_weights[i] > 0:
+                        mutated_weights[i] = np.random.uniform(mutated_weights[i]*0.8, mutated_weights[i]*1.2)
                         if mutated_weights[i] > 1:
                             mutated_weights[i] = 1
+                    elif mutated_weights[i] == 0:
+                        mutated_weights[i] = np.random.uniform(-0.1, 0.1)
                     else:
-                        mutated_weights[i] = np.random.uniform(mutated_weights[i] * 1.1, mutated_weights[i] * 0.9)
+                        mutated_weights[i] = np.random.uniform(mutated_weights[i] * 1.2, mutated_weights[i] * 0.8)
                         if mutated_weights[i] < -1:
                             mutated_weights[i] = -1
 
             mutated_weights = round_weights(mutated_weights)
+            mutated_weights = zero_destroyer(mutated_weights)
             new_fitness = fitness_function_cached(mutated_weights)
             new_chromosomes.append((mutated_weights, new_fitness))
 
@@ -109,6 +113,7 @@ def mutation_3(population, MUTATION_RATE, SHOW):
                         mutated_weights[i] = np.random.uniform(-0.01, 0.01)
 
             mutated_weights = round_weights(mutated_weights)
+            mutated_weights = zero_destroyer(mutated_weights)
             new_fitness = fitness_function_cached(mutated_weights)
             new_chromosomes.append((mutated_weights, new_fitness))
 

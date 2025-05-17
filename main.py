@@ -15,7 +15,7 @@ timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 
 # Параметры
 POPULATION_SIZE = 50
-EPOCH = 10000
+EPOCH = 500
 MUTATION_RATE = 0.4
 SHOW = False
 CHECK_RESULTS_ON = True
@@ -24,7 +24,7 @@ STATS_SHOW = True
 # Инициализация популяции
 population = generate_population(POPULATION_SIZE)
 
-PAR = int(len(population)*0.25)
+PAR = int(len(population)*0.6)
 
 STATS = [] # Сохранение статистики обучения
 
