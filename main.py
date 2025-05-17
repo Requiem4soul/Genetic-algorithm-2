@@ -45,8 +45,8 @@ for epoch in range(EPOCH):
     print(f"Эпоха {epoch + 1}/{EPOCH}")
 
     population = mutation_3(population, MUTATION_RATE, SHOW)
-    population = mutation_2(population, MUTATION_RATE, SHOW)
     population = mutation_1(population, MUTATION_RATE, SHOW)
+    population = mutation_2(population, MUTATION_RATE, SHOW)
     update_archive(population)
     population = crossover_3(population, SHOW, PAR)
     update_archive(population)
