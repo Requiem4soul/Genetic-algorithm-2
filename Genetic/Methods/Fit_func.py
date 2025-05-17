@@ -1,4 +1,6 @@
 import numpy as np
+from Genetic.Methods.Utils import My_img_mask
+from Data.correct_img import MAX_SUM_NET
 
 # Старая с пенальти. Не отражала реальных результатов. С пенальти показывает что уже около 1, а по факту лишь 16% верно распознаёт
 # Но оказалосб что для лёгких и средних значений лучше её использовать
@@ -20,6 +22,13 @@ def fitness_function_cached(weights):
         return fitness_cache[key]
 
     weights = np.array(weights, dtype=np.float32)
+
+    # Мне надоело смотреть как он пытается вес 0.35 убрать уже 20 минут
+    error_active_than_NET = 0
+    active_sum = np.sum(weights[My_img_mask])
+    if active_sum > MAX_SUM_NET:
+        error_active_than_NET = active_sum - NET
+
 
     # Проверка правильного изображения
     net_correct = np.dot(weights, My_img)
@@ -46,10 +55,11 @@ def fitness_function_cached(weights):
             fitness = 1.0
         else:
             penalty = penalty_sum / penalty_count
+            # Если в весах нули, но уже по идее это пофиксил. Но пусть лучше останется
             if penalty == 0.0:
-                fitness = 1.0 / (1.0 + penalty_count)
+                fitness = 1.0 / (1.0 + penalty_count + error_active_than_NET)
             else:
-                fitness = 1.0 / (1.0 + penalty * penalty_count)
+                fitness = 1.0 / (1.0 + penalty * penalty_count + error_active_than_NET)
 
         fitness = round(fitness, 8)
 
