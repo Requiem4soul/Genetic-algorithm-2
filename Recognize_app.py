@@ -9,7 +9,7 @@ WEIGHTS_DIR = "Data/Save_weights"
 IMAGES_DIR = "Data/Pictures_for_recognize"
 
 def add_My_img(My_img):
-    img_array = My_img.reshape((4, 4)) * 255
+    img_array = (1 - My_img).reshape((4, 4)) * 255
     save_path = "Data/Pictures_for_recognize/My_img.png"
     Image.fromarray(img_array.astype(np.uint8), mode='L').save(save_path)
     print(f"Изображение перезаписано")
@@ -29,7 +29,7 @@ def load_best_weights():
 def image_to_vector(image_path):
     img = Image.open(image_path).convert("L").resize((4, 4))
     data = np.asarray(img)
-    vector = (data > 128).astype(np.uint8).flatten()
+    vector = (data < 128).astype(np.uint8).flatten()
     return vector
 
 # Основная логика

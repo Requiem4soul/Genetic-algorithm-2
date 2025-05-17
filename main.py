@@ -16,7 +16,7 @@ timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 # Параметры
 POPULATION_SIZE = 50
 EPOCH = 10000
-MUTATION_RATE = 0.3
+MUTATION_RATE = 0.4
 SHOW = False
 CHECK_RESULTS_ON = True
 STATS_SHOW = True
@@ -24,7 +24,7 @@ STATS_SHOW = True
 # Инициализация популяции
 population = generate_population(POPULATION_SIZE)
 
-PAR = int(len(population)*0.2)
+PAR = int(len(population)*0.25)
 
 STATS = [] # Сохранение статистики обучения
 
@@ -44,9 +44,9 @@ for epoch in range(EPOCH):
     print("═" * 50)
     print(f"Эпоха {epoch + 1}/{EPOCH}")
 
-    population = mutation_3(population, MUTATION_RATE, SHOW)
     population = mutation_1(population, MUTATION_RATE, SHOW)
     population = mutation_2(population, MUTATION_RATE, SHOW)
+    population = mutation_3(population, MUTATION_RATE, SHOW)
     update_archive(population)
     population = crossover_3(population, SHOW, PAR)
     update_archive(population)
