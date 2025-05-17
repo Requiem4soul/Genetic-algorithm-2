@@ -1,5 +1,6 @@
 import numpy as np
 from Genetic.Methods.Fit_func import fitness_function_cached
+from Genetic.Methods.Utils import round_weights
 
 def crossover_1(population, SHOW, PAR = 3):
     """
@@ -63,7 +64,9 @@ def crossover_1(population, SHOW, PAR = 3):
 
         # Преобразуем обратно в NumPy массивы для вычисления фитнеса
         child1_weights = np.array(child1_weights, dtype=np.float32)
+        child1_weights = round_weights(child1_weights)
         child2_weights = np.array(child2_weights, dtype=np.float32)
+        child2_weights = round_weights(child2_weights)
 
         # Расчет фитнеса
         child1_fit = fitness_function_cached(child1_weights)
@@ -144,7 +147,9 @@ def crossover_2(population, SHOW, PAR = 3):
 
         # Конвертируем в numpy для фитнеса
         child1_weights = np.array(child1_weights, dtype=np.float32)
+        child1_weights = round_weights(child1_weights)
         child2_weights = np.array(child2_weights, dtype=np.float32)
+        child2_weights = round_weights(child2_weights)
 
         # Расчет фитнеса
         child1_fit = fitness_function_cached(child1_weights)
@@ -191,7 +196,9 @@ def crossover_3(population, SHOW, PAR = 3):
 
         # Конвертируем в numpy для фитнеса
         child1_weights = np.array(child1_weights, dtype=np.float32)
+        child1_weights = round_weights(child1_weights)
         child2_weights = np.array(child2_weights, dtype=np.float32)
+        child2_weights = round_weights(child2_weights)
 
         # Расчет фитнеса
         child1_fit = fitness_function_cached(child1_weights)

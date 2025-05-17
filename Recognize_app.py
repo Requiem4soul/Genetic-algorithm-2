@@ -2,11 +2,17 @@ import os
 import numpy as np
 from PIL import Image
 import matplotlib.pyplot as plt
-from Data.correct_img import NET
+from Data.correct_img import NET, My_img
 
 # Пути
 WEIGHTS_DIR = "Data/Save_weights"
 IMAGES_DIR = "Data/Pictures_for_recognize"
+
+def add_My_img(My_img):
+    img_array = My_img.reshape((4, 4)) * 255
+    save_path = "Data/Pictures_for_recognize/My_img.png"
+    Image.fromarray(img_array.astype(np.uint8), mode='L').save(save_path)
+    print(f"Изображение перезаписано")
 
 # Загрузка лучших весов
 def load_best_weights():
@@ -23,7 +29,7 @@ def load_best_weights():
 def image_to_vector(image_path):
     img = Image.open(image_path).convert("L").resize((4, 4))
     data = np.asarray(img)
-    vector = (data < 128).astype(np.uint8).flatten()
+    vector = (data > 128).astype(np.uint8).flatten()
     return vector
 
 # Основная логика
@@ -86,7 +92,7 @@ def process_images_with_arrows():
     print("═" * 40)
     print(f"Всего изображений: {total}")
     print(f"Угадано корректно: {correct}")
-    print(f"Ошибок: {total - correct}")
+    # print(f"Ошибок: {abs(1-total)}")
 
     if correct == 1:
         print("Веса подходят — активировались один раз и правильно")
@@ -95,5 +101,6 @@ def process_images_with_arrows():
     else:
         print("Нет ни одного правильного активационного ответа.")
 
+add_My_img(My_img)
 # Запуск
 process_images_with_arrows()
