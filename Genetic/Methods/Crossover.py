@@ -91,7 +91,7 @@ def crossover_1(population, SHOW, PAR = 3):
 
 def crossover_2(population, SHOW, PAR = 3):
     """
-    Кроссовер с точностью до одного знака после запятой (3 бита).
+    Кроссовер с точностью до одного знака после запятой (4 бита).
     """
     sorted_pop = sorted(population, key=lambda x: x[1])
     new_offspring = []
@@ -133,8 +133,8 @@ def crossover_2(population, SHOW, PAR = 3):
             gene2 = int(val2 * 10)
 
             # Побитовые операции через бинарные строки (как в crossover_1)
-            bin1 = format(gene1, '03b')
-            bin2 = format(gene2, '03b')
+            bin1 = format(gene1, '04b')
+            bin2 = format(gene2, '04b')
             new_bin1 = bin1[:2] + bin2[2:]
             new_bin2 = bin2[:2] + bin1[2:]
 
